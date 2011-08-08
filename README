@@ -1,0 +1,43 @@
+Get Twitter Links
+=================
+
+
+This is a URL extraction tool which extract URL/links from Twitter
+
+ Example --
+== Get_Twitter_Links_of_User.py ==
+./Get_Twitter_Links_of_User.py nsisodiya 10
+User : nsisodiya
+http://blog.narendrasisodiya.com/2011/08/how-to-learn-php.html
+http://narendrasisodiya.com/Portfolio
+http://www.softwarefreedom.in/index.php?option=com_content&view=article&id=93&Itemid=80
+http://www.amankapaigham.com/2011/08/blog-post.html
+http://twitpic.com/5ztnhg
+http://groups.google.com/group/ubuntu-uck-remaster
+http://blog.narendrasisodiya.com/2011/08/idea-linux-daily-links.html
+
+
+So the python script Get_Twitter_Links_of_User.py will download latest 10 Tweets
+from user http://twitter.com/nsisodiya and print URL from those 10 Tweets.
+
+It takes two argument, UserName and Number of Tweets to be scanned
+
+== Get Twitter Links of Multiple Users ==
+
+STEP 1 - Add Users
+narendra@localhost$ gedit listuser
+
+STEP 2 - Initialize User
+
+narendra@localhost$ ./InitiateUser.py
+This will list total number tweets of a user. This is needed to calculate Total 
+  number of latest Tweets by that user 
+
+STEP 3 - Wait - you must wait for some time so that user Tweets some latest link/URL
+
+
+STEP 4 - 
+narendra@localhost$ ./Get_Twitter_Links.py
+
+This Will print latest URL of users..
+

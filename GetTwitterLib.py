@@ -4,12 +4,6 @@ import urllib2
 import simplejson as json
 import sys
 
-"""
-TODO: Features to be added
-1. Resume capability
-2. Failure of one object (ex. unable to fetch feeds) doesn't interfere with another object
-"""
-
 class TwitterLib:
     def __init__(self,user):
         URL = "http://api.twitter.com/1/users/show.json?screen_name=" + user + "&include_entities=false"
@@ -22,9 +16,37 @@ class TwitterLib:
     def get_latest_tweet_id(self):
         return self.userData["status"]["id_str"]
 
+    def get_latest_ripped_tweet_id(self):
+        f = open("last/" + self.userData["screen_name"], "r")
+        return f.readline().split(":")[1].strip()
+
     def dump_tweets(self):
-        return "\n".join(self.rip_tweeted_links())
-    
+        return "\n".join(self.rip_tweeted_links()[-1::-1]) #concatenate backwards
+
+    def dump_resumed_tweets(self):
+        return "\n".join(self.resume_ripping_tweets()[-1::-1]) #concatenate backwards
+
+    def resume_ripping_tweets(self):
+        tweeted_links = []
+        URL = "http://api.twitter.com/1/statuses/user_timeline.json?screen_name=" + self.userData["screen_name"] + "&count=200&include_rts=true&include_entities=true&exclude_replies=false&contributor_details=false&trim_user=true&since_id=" + self.get_latest_ripped_tweet_id() + "&page=%d"
+        page = 1
+        try:
+            nodes = json.load(urllib2.urlopen(URL%page))
+        except:
+            print "Dude check your connectivity / IP blacklisting...I can't even fetch the first page!"
+            sys.exit(1)
+        while (nodes):
+            for node in nodes:
+                for link in self.Get_URL_FromTweet(node["entities"]["urls"]):
+                    tweeted_links.append(link)
+            page+=1
+            try:
+                nodes = json.load(urllib2.urlopen(URL%page))
+            except :
+                print "Sorry .... I give up! ... You have some serious issues with your connectivity ... or maybe twitter is over capacity... Try later"
+                sys.exit(1)
+        return tweeted_links
+
     def rip_tweeted_links(self):
         tweeted_links = []
         #max_id is required since a user may tweet in between we are ripping

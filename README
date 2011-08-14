@@ -7,8 +7,10 @@ This is a URL extraction tool which extract URL/links from Twitter
 STEP 1 - Add Users
 narendra@localhost$ gedit listuser
 
-STEP 2 - Initialize User
-narendra@localhost$ ./InitiateUser.py
+STEP 2 - Rip Tweeted Links of User
+narendra@localhost$ ./UpdateTweets.py
 
 STEP 3 - Wait and see the output in /last directory
 
+
+NOTE: In case an error occurs, run ./UpdateTweets.py again ... Twitter may be over capacity OR your IP is blacklisted for a while

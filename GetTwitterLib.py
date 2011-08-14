@@ -19,12 +19,16 @@ class TwitterLib:
             print "Can't fetch user details..."
             sys.exit(1)
 
+    def get_latest_tweet_id(self):
+        return self.userData["status"]["id_str"]
+
     def dump_tweets(self):
         return "\n".join(self.rip_tweeted_links())
     
     def rip_tweeted_links(self):
         tweeted_links = []
-        URL = "http://api.twitter.com/1/statuses/user_timeline.json?screen_name=" + self.userData["screen_name"] + "&count=200&include_rts=true&include_entities=true&exclude_replies=false&contributor_details=false&trim_user=true&page=%d"
+        #max_id is required since a user may tweet in between we are ripping
+        URL = "http://api.twitter.com/1/statuses/user_timeline.json?screen_name=" + self.userData["screen_name"] + "&count=200&include_rts=true&include_entities=true&exclude_replies=false&contributor_details=false&trim_user=true&max_id=" + self.get_latest_tweet_id() + "&page=%d"
         page = 1
         try:
             nodes = json.load(urllib2.urlopen(URL%page))

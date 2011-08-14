@@ -17,28 +17,23 @@ file_listuser=open('listuser', 'r')
 
 for user in file_listuser:
 	print ""
-	print "User : " + user
+	print "Updating User : " + user + "..."
 	user = user.rstrip('\n')
-	
+
 	TotalTweets = Get_Total_Tweets(user)
-	LastTweets = Get_Last_updated_tweet(user)
+	LastLinkCount,LastTweetID = Get_Last_updated_details(user)
 
-	"""
-	f=open("last/" + user, "w")
-	f.write(TotalTweets)
-	f.close()
-	"""
+	Count = int(TotalTweets) - int(LastTweetCount) #number of tweets to fetch
 
-	Count = int(TotalTweets) - int(LastTweets)
-	
-	#print Count
 	if (Count == 0 ):
-		print "no need to update"
+		print "Already up to date"
 	else:
-		GetLinks("http://api.twitter.com/1/statuses/user_timeline.rss?include_entities=false&include_rts=true&count="+ str(Count) +"&screen_name=" + user )
-		
-		#TODO
-		# Store and sort all links
-		
-	
+		print "Fetching new links..."
+		tweetedlinks = GetLinks("http://api.twitter.com/1/statuses/user_timeline.json?include_entities=true&include_rts=true&count="+ str(Count) +"&screen_name=" + user)
+		f = open("last/"+user,"a")
+        f.writelines(tweetedlinks)
+        f.close()
+
 file_listuser.close()
+
+print "Successfully updated ..."

@@ -2,6 +2,7 @@
 #By -  Narendra Sisodiya - http://narendrasisodiya.com
 
 from GetTwitterLib import *
+import sys
 
 user = sys.argv[1]
 try :
@@ -14,4 +15,6 @@ print "User : " + user
 if (count <= 0) :
 	print "Please enter an integer value of count greater than 0"
 else:
-	GetLinks("http://api.twitter.com/1/statuses/user_timeline.rss?include_entities=false&include_rts=true&count="+ str(count) +"&screen_name=" + user )
+    tweetlinks = GetLinks("http://api.twitter.com/1/statuses/user_timeline.json?include_entities=true&include_rts=true&count=" + str(count) + "&screen_name=" + user)
+    for links in tweetlinks:
+        print links
